@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Kontaktai{% endblock %}
+
+{% block content %}
+  <h2>Kontaktų forma</h2>
+
+  {% if sekme %}
+    <div class="success">
+      <h3>Ačiū! Jūsų žinutė gauta.</h3>
+      <p><strong>Vardas:</strong> {{ vardas }}</p>
+      <p><strong>El. paštas:</strong> {{ elpastas }}</p>
+      <p><strong>Žinutė:</strong> {{ zinute }}</p>
+    </div>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('kontaktai') }}">
+    <label for="vardas">Vardas:</label>
+    <input type="text" id="vardas" name="vardas" required>
+
+    <label for="elpastas">El. paštas:</label>
+    <input type="email" id="elpastas" name="elpastas" required>
+
+    <label for="zinute">Žinutė:</label>
+    <textarea id="zinute" name="zinute" rows="5" required></textarea>
+
+    <button type="submit">Siųsti</button>
+  </form>
+{% endblock %}
