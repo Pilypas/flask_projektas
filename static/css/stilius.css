@@ -1,0 +1,191 @@
+/* =========================== 2026-02-13 IIST24
+   Bendras puslapio stilius
+   =========================== */
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ===========================
+   Viršutinė antraštė (header)
+   =========================== */
+header {
+  background: #2b2b2b;
+  color: #fff;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 0;
+}
+
+header h1 a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header h1 a:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+   Navigacija (nav)
+   =========================== */
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 4px;
+}
+
+nav ul li a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  color: #ddd;
+  font-size: 0.95rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+nav ul li a:hover {
+  background: #444;
+  color: #fff;
+}
+
+/* ===========================
+   Pagrindinis turinio blokas
+   =========================== */
+.container {
+  max-width: 800px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+
+.container a {
+  color: #2a7ae2;
+}
+
+.container a:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+   Apatinė dalis (footer)
+   =========================== */
+footer {
+  background: #f5f5f5;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  padding: 16px 24px;
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 48px;
+}
+
+/* ===========================
+   Forma
+   =========================== */
+form {
+  max-width: 520px;
+}
+
+label {
+  display: block;
+  margin-top: 14px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2a7ae2;
+  box-shadow: 0 0 3px rgba(42, 122, 226, 0.3);
+}
+
+button {
+  margin-top: 18px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background: #2b2b2b;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #444;
+}
+
+/* ===========================
+   Patvirtinimo blokas
+   =========================== */
+.success {
+  border: 1px solid #2e7d32;
+  background: #e8f5e9;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.success h3 {
+  margin-top: 0;
+}
+
+/* ===========================
+   Klaidos pranešimas
+   =========================== */
+.error {
+  border: 1px solid #c62828;
+  background: #ffebee;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: #c62828;
+}
+
+/* ===========================
+   Komentarų sąrašas
+   =========================== */
+.komentaras {
+  border-bottom: 1px solid #eee;
+  padding: 14px 0;
+}
+
+.komentaras:last-child {
+  border-bottom: none;
+}
+
+.komentaro-meta {
+  margin: 0 0 4px 0;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.komentaro-meta strong {
+  color: #333;
+  font-size: 0.95rem;
+}
