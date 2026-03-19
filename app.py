@@ -2,12 +2,9 @@
 #Šiame faile aprašyti maršrutai (routes)
 
 #Reikalingos bibliotekos (importai)
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
 from flask import Flask, render_template
-=======
->>>>>>> 4c9aafd
+
 import os
 from flask import Flask, render_template
 from dotenv import load_dotenv # .env failo nuskaitymui
@@ -16,19 +13,12 @@ from mysql.connector import Error
 
 #Užkrauname aplinkos kintamuosius iš .env failo
 load_dotenv()
-<<<<<<< HEAD
-=======
->>>>>>> 957c885 (Atnaujintas projektas)
->>>>>>> 4c9aafd
+
 
 #Sukuriame Flask aplikacijos objektą
 app = Flask(__name__)
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 4c9aafd
+
 #Duomenų bazės prijungimas
 def get_db_connection():
     return mysql.connector.connect(
@@ -51,13 +41,6 @@ def db_testas():
     except Error as e:
         return f"Klaida jungiantis: {e}"    
         
-
-
-
-<<<<<<< HEAD
-=======
->>>>>>> 957c885 (Atnaujintas projektas)
->>>>>>> 4c9aafd
 #Maršrutas: pagrindinis puslapis
 # URL: /
 # Metodas: GET
@@ -79,11 +62,7 @@ def kontaktai():
 def apie():
     return render_template("apie.html")
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 4c9aafd
+
 #Maršrutas: komentarų puslapis
 @app.route("/komentarai", methods=["GET", "POST"]) #Dekoratorius
 def komentarai():
@@ -91,10 +70,6 @@ def komentarai():
         "komentarai.html"
     )
 
-<<<<<<< HEAD
-=======
->>>>>>> 957c885 (Atnaujintas projektas)
->>>>>>> 4c9aafd
 #Aplikacijos paleidimas
 #Paleidimo metu kai debug = True - automatinis aplikacijos perkrovimas pakeitus kodą + klaidų rodymas
 if __name__ == "__main__":
