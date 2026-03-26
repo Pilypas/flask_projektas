@@ -6,6 +6,13 @@
 {% block turinys %}
 <h2>Komentarai</h2>
 
+<!--Sėkmės pranešimas po sėkmingo komentaro išsaugojimo-->
+{% if sekme %}
+<div class="success">
+    <h3>Ačiū! Jūsų komentaras išsaugotas.</h3>
+</div>
+{% endif %}
+
 <p>Čia yra Flask aplikacijos komentarų puslapis</p>
 
 <form method="post" action="{{ url_for('komentarai') }}">

@@ -3,7 +3,7 @@
 
 #Reikalingos bibliotekos (importai)
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 import os
 from flask import Flask, render_template
@@ -28,6 +28,34 @@ def get_db_connection():
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME")
     )
+
+#Automatinis lentelės sukūrimas (paleidimo metu)
+#Ši funkcija kviečiama vieną katą startuojant aplikacijai
+
+def sukurti_db_lenteles():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        lenteliu_sukurimo_db_uzklausa = """
+        CREATE TABLE IF NOT EXISTS komentarai (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            vardas VARCHAR(100) NOT NULL,
+            elpastas VARCHAR(150) NOT NULL,
+            zinute TEXT NOT NULL,
+            sukurta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+
+        cursor.execute(lenteliu_sukurimo_db_uzklausa)
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        print("Lentelė komentarai sėkmingai sukurta")
+    except Error as e:
+        print("Klaida kuriant lentelę", e)
 
 # Maršrutas: DB prisijungimo testas
 @app.route("/db-testas")
@@ -66,11 +94,40 @@ def apie():
 #Maršrutas: komentarų puslapis
 @app.route("/komentarai", methods=["GET", "POST"]) #Dekoratorius
 def komentarai():
+    sekme = False
+    klaida = None
+
+    if request.method == "POST":
+        vardas = request.form.get("vardas")
+        elpastas = request.form.get("elpastas")
+        zinute = request.form.get("zinute")
+
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            #Įrašome naują komentarą naudodami parametrizuotą užklausą
+            cursor.execute(
+            "INSERT INTO komentarai (vardas, elpastas, zinute) VALUES (%s, %s, %s)",
+            (vardas, elpastas, zinute)
+             )
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            sekme = True
+        except Error as e:
+            klaida = f"Nepavyko išsaugoti komentaro: {e}"    
+
+
+
     return render_template(
-        "komentarai.html"
+        "komentarai.html",
+        klaida = klaida,
+        sekme = sekme
     )
 
 #Aplikacijos paleidimas
 #Paleidimo metu kai debug = True - automatinis aplikacijos perkrovimas pakeitus kodą + klaidų rodymas
 if __name__ == "__main__":
+    sukurti_db_lenteles()
     app.run(debug=True)
