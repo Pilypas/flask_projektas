@@ -6,7 +6,7 @@
 from flask import Flask, render_template, request
 
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template # naudoja Jinja2 viduje automatiskai pacio flask
 from dotenv import load_dotenv # .env failo nuskaitymui
 import mysql.connector
 from mysql.connector import Error
@@ -96,6 +96,7 @@ def apie():
 def komentarai():
     sekme = False
     klaida = None
+    visi_komentarai = [] # Sąrašas komentarų, kuriuos rodysime puslapyje
 
     if request.method == "POST":
         vardas = request.form.get("vardas")
@@ -118,12 +119,24 @@ def komentarai():
         except Error as e:
             klaida = f"Nepavyko išsaugoti komentaro: {e}"    
 
+    #Nuskaitome visus komentarus iš DB
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
 
+        #Rikiuojame visus komentarus nuo naujausio komentaro
+        cursor.execute("SELECT vardas, elpastas, zinute, sukurta FROM komentarai ORDER BY sukurta DESC") 
+        visi_komentarai = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except Error as e:
+        klaida = f"Nepavyko nuskaityti komentarų {e}"
 
     return render_template(
         "komentarai.html",
         klaida = klaida,
-        sekme = sekme
+        sekme = sekme,
+        komentarai = visi_komentarai
     )
 
 #Aplikacijos paleidimas

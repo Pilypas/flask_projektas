@@ -13,6 +13,13 @@
 </div>
 {% endif %}
 
+<!--Sėkmės pranešimas po sėkmingo komentaro išsaugojimo-->
+{% if klaida %}
+<div class="error">
+    <h3>Išsaugojant komentarą įvyko {{ klaida }}</h3>
+</div>
+{% endif %}
+
 <p>Čia yra Flask aplikacijos komentarų puslapis</p>
 
 <form method="post" action="{{ url_for('komentarai') }}">
@@ -27,6 +34,27 @@
 
     <button type="submit">Komentuoti</button>
 </form>
+
+<!-- Visų komentarų sąrašas iš duomenų bazės-->
+<hr style="color:aqua; border:3px solid;">
+<h3>Visi komentarai: ({{ komentarai|length}})</h3>
+
+
+{% if komentarai %}
+{% for k in komentarai %}
+
+<div class="komentaras">
+<p class="komentaro-meta">
+<strong>{{ k.vardas }}</strong>
+&middot; {{ k.sukurta.strftime('%Y-%m-%d %H:%M') }}
+</p>
+<p>{{ k.zinute }}</p>
+</div>
+{% endfor %}
+
+{% else %}
+<p>Komentarų nėra. Būk pirmas ir parašyk komentarą.</p>
+{% endif %}
 
 
 {% endblock %}
