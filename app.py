@@ -11,6 +11,10 @@ from dotenv import load_dotenv # .env failo nuskaitymui
 import mysql.connector
 from mysql.connector import Error
 
+#Darbui su hash passwordais
+from werkzeug.security import generate_password_hash
+
+
 #Užkrauname aplinkos kintamuosius iš .env failo
 load_dotenv()
 
@@ -47,13 +51,24 @@ def sukurti_db_lenteles():
         );
         """
 
+        vartotoju_sukurimo_db_uzklausa = """
+        CREATE TABLE IF NOT EXISTS vartotojai (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            vardas VARCHAR(100) NOT NULL,
+            elpastas VARCHAR(150) NOT NULL UNIQUE,
+            slaptazodis VARCHAR(255) NOT NULL,
+            sukurta TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+
         cursor.execute(lenteliu_sukurimo_db_uzklausa)
+        cursor.execute(vartotoju_sukurimo_db_uzklausa)
         conn.commit()
 
         cursor.close()
         conn.close()
 
-        print("Lentelė komentarai sėkmingai sukurta")
+        print("Lentelės sėkmingai sukurtos")
     except Error as e:
         print("Klaida kuriant lentelę", e)
 
@@ -89,6 +104,50 @@ def kontaktai():
 @app.route("/apie") #Dekoratorius
 def apie():
     return render_template("apie.html")
+
+#Maršrutas: registracija
+@app.route("/registracija", methods=["GET", "POST"])
+def registracija():
+    klaida = None
+    sekme = False
+
+    if request.method == "POST":
+        vardas = request.form.get("vardas")
+        elpastas = request.form.get("elpastas")
+        slaptazodis = request.form.get("slaptazodis")
+
+        if not vardas or not elpastas or not slaptazodis:
+            klaida = "Užpildykite visus laukus."
+            return render_template("registracija.html", klaida=klaida, sekme=sekme)
+
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+
+            # Patikriname, ar vartotojas jau egzistuoja
+            cursor.execute("SELECT id FROM vartotojai WHERE elpastas = %s", (elpastas,))
+            egzistuojantis_vartotojas = cursor.fetchone()
+
+            if egzistuojantis_vartotojas:
+                klaida = "Toks vartotojas jau egzistuoja."
+            else:
+                uzkoduotas_slaptazodis = generate_password_hash(slaptazodis)
+
+                cursor.execute(
+                    "INSERT INTO vartotojai (vardas, elpastas, slaptazodis) VALUES (%s, %s, %s)",
+                    (vardas, elpastas, uzkoduotas_slaptazodis)
+                )
+                conn.commit()
+                sekme = True
+
+            cursor.close()
+            conn.close()
+
+        except Error as e:
+            klaida = f"Nepavyko užregistruoti vartotojo: {e}"
+
+    return render_template("registracija.html", klaida=klaida, sekme=sekme)  
+
 
 
 #Maršrutas: komentarų puslapis
