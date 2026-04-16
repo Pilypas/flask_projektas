@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Prisijungimo puslapis{% endblock %}
+
+{% block turinys %}
+<h2>Prisijungimas</h2>
+
+
+{% if klaida %}
+  <div class="error">{{ klaida }}</div>
+{% endif %}
+
+
+<form method="post">
+    <label for="elpastas">El. paštas</label>
+    <input type="email" id="elpastas" name="elpastas" placeholder="El. paštas" required>
+
+    <label for="password">Slaptažodis</label>
+    <input type="password" id="slaptazodis" name="slaptazodis" placeholder="Slaptažodis" required>
+
+    <button type="submit">Prisijungti</button>
+
+</form>
+{% endblock %}

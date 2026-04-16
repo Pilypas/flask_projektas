@@ -22,7 +22,19 @@
         <li><a href="{{ url_for('komentarai') }}">Komentarai</a></li>
         <li><a href="{{ url_for('db_testas') }}">MySQL Test</a></li>
         <li><a href="{{ url_for('komentarai') }}">Komentarai</a></li>
+
+        {% if session.vartotojo_id %}
+
+        <li><a href="{{ url_for('profilis') }}">Profilis <span style="font-size:9px;color:red;">({{ session.vartotojo_vardas }})</span></a></li>
+        <li><a href="{{ url_for('atsijungti') }}">Atsijungti</a></li>
+
+        {% else %}
+
         <li><a href="{{ url_for('registracija') }}">Registracija</a></li>
+        <li><a href="{{ url_for('prisijungimas') }}">Prisijungti</a></li>
+
+        {% endif %}
+
     </ul>
 </nav>
 

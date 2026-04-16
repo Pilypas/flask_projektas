@@ -3,16 +3,16 @@
 
 #Reikalingos bibliotekos (importai)
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, url_for, redirect # naudoja Jinja2 viduje automatiskai pacio flask
 
 import os
-from flask import Flask, render_template # naudoja Jinja2 viduje automatiskai pacio flask
+import secrets
 from dotenv import load_dotenv # .env failo nuskaitymui
 import mysql.connector
 from mysql.connector import Error
 
 #Darbui su hash passwordais
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 #Užkrauname aplinkos kintamuosius iš .env failo
@@ -22,6 +22,12 @@ load_dotenv()
 #Sukuriame Flask aplikacijos objektą
 app = Flask(__name__)
 
+#Secret_KEY (automatinis genravimas, jei nėra rakto .env faile)
+secret_key = os.getenv("SECRET_KEY")
+if not secret_key:
+    secret_key = secrets.token_hex(16)
+
+app.secret_key = secret_key
 
 #Duomenų bazės prijungimas
 def get_db_connection():
@@ -147,6 +153,51 @@ def registracija():
             klaida = f"Nepavyko užregistruoti vartotojo: {e}"
 
     return render_template("registracija.html", klaida=klaida, sekme=sekme)  
+
+
+#Prisijungimo maršrutas
+@app.route("/prisijungimas", methods=["GET", "POST"])
+def prisijungimas():
+    klaida = None
+
+    if request.method == "POST":
+        elpastas = request.form.get("elpastas")
+        slaptazodis = request.form.get("slaptazodis")
+
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+
+            cursor.execute("SELECT * FROM vartotojai WHERE elpastas=%s",(elpastas,))
+            vartotojas = cursor.fetchone()
+
+            cursor.close()
+            conn.close()
+
+            if vartotojas and check_password_hash(vartotojas["slaptazodis"], slaptazodis):
+                session["vartotojo_id"] = vartotojas["id"]
+                session["vartotojo_vardas"] = vartotojas["vardas"]
+                return redirect(url_for("profilis"))
+            else:
+                klaida = "Neteisingi duomenys"
+        except Error as e:
+            klaida = f"Klaida: {e}"        
+    return render_template("prisijungimas.html", klaida=klaida)
+
+#Profilio maršrutas (apsaugotas)
+@app.route("/profilis")
+def profilis():
+    if "vartotojo_id" not in session:
+        return redirect(url_for("prisijungimas"))
+    
+    return render_template("profilis.html", vardas=session["vartotojo_vardas"])
+
+#Atsijungimas
+@app.route("/atsijungti")
+def atsijungti():
+    session.clear()
+    return redirect(url_for("index"))
+
 
 
 

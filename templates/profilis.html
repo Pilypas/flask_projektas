@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Profilio puslapis{% endblock %}
+
+{% block turinys %}
+<h2>Profilis</h2>
+
+
+{% if klaida %}
+  <div class="error">{{ klaida }}</div>
+{% endif %}
+
+<p>Sveiki, {{ vardas }}</p>
+
+
+{% endblock %}
