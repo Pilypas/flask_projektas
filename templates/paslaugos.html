@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}Paslaugos{% endblock %}
+
+{% block turinys %}
+<h2>Paslaugų sąrašas</h2>
+
+<p>
+    <a href="{{ url_for('ivesti_paslauga') }}">+ Įvesti naują paslaugą</a>
+</p>
+
+{% if klaida %}
+<div class="error">{{ klaida }}</div>
+{% endif %}
+
+{% if paslaugos %}
+<table class="duomenu-lentele">
+    <thead>
+        <tr>
+            <th>Pavadinimas</th>
+            <th>Kategorija</th>
+            <th>Trukmė (min.)</th>
+            <th>Kaina (€)</th>
+            <th>Aktyvi</th>
+            <th>Aprašymas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for paslauga in paslaugos %}
+        <tr>
+            <td>{{ paslauga.pavadinimas }}</td>
+            <td>{{ paslauga.kategorija }}</td>
+            <td>{{ paslauga.trukme_min }}</td>
+            <td>{{ paslauga.kaina }}</td>
+            <td>{{ "Taip" if paslauga.aktyvi else "Ne" }}</td>
+            <td>{{ paslauga.aprasymas }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Kol kas paslaugų nėra.</p>
+{% endif %}
+{% endblock %}

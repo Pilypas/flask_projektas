@@ -1,16 +1,61 @@
 {% extends "layout.html" %}
 
-{% block title %}Profilio puslapis{% endblock %}
+{% block title %}Profilis{% endblock %}
 
 {% block turinys %}
-<h2>Profilis</h2>
-
+<h2>Profilio puslapis</h2>
 
 {% if klaida %}
   <div class="error">{{ klaida }}</div>
 {% endif %}
 
-<p>Sveiki, {{ vardas }}</p>
+{% if sekme %}
+  <div class="success">Profilio duomenys sėkmingai atnaujinti.</div>
+{% endif %}
 
+{% if vartotojas %}
+<div class="profilio-blokas">
+    <div class="profilio-kaire">
+        {% if vartotojas.avataro_nuoroda %}
+            <img src="{{ vartotojas.avataro_nuoroda }}" alt="Avataras" class="avataras">
+        {% else %}
+            <div class="avataro-vieta">Nėra avataro</div>
+        {% endif %}
+    </div>
 
+    <div class="profilio-desine">
+        <p><strong>El. paštas:</strong> {{ vartotojas.elpastas }}</p>
+        <p><strong>Gimimo metai:</strong> {{ vartotojas.gimimo_metai if vartotojas.gimimo_metai else "-" }}</p>
+        <p><strong>Miestas:</strong> {{ vartotojas.miestas if vartotojas.miestas else "-" }}</p>
+        <p><strong>Biografija:</strong> {{ vartotojas.biografija if vartotojas.biografija else "-" }}</p>
+    </div>
+</div>
+
+<hr>
+
+<h3>Redaguoti profilį</h3>
+
+<form method="post">
+    <label for="vardas">Vardas</label>
+    <input type="text" id="vardas" name="vardas" value="{{ vartotojas.vardas }}" required>
+
+    <label for="gimimo_metai">Gimimo metai</label>
+    <input type="number" id="gimimo_metai" name="gimimo_metai" min="1900" max="2100"
+           value="{{ vartotojas.gimimo_metai if vartotojas.gimimo_metai else '' }}">
+
+    <label for="miestas">Miestas</label>
+    <input type="text" id="miestas" name="miestas"
+           value="{{ vartotojas.miestas if vartotojas.miestas else '' }}">
+
+    <label for="biografija">Biografija</label>
+    <textarea id="biografija" name="biografija" rows="5">{{ vartotojas.biografija if vartotojas.biografija else '' }}</textarea>
+
+    <label for="avataro_nuoroda">Avataro nuoroda</label>
+    <input type="text" id="avataro_nuoroda" name="avataro_nuoroda"
+           value="{{ vartotojas.avataro_nuoroda if vartotojas.avataro_nuoroda else '' }}"
+           placeholder="https://...">
+
+    <button type="submit">Išsaugoti pakeitimus</button>
+</form>
+{% endif %}
 {% endblock %}

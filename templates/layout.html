@@ -14,29 +14,40 @@
         </h1>
 
 
-<nav>
-    <ul>
-        <li><a href="{{ url_for('index') }}">Pagrindinis</a></li>
-        <li><a href="{{ url_for('kontaktai') }}">Kontaktai</a></li>
-        <li><a href="{{ url_for('apie') }}">Apie mus</a></li>
-        <li><a href="{{ url_for('komentarai') }}">Komentarai</a></li>
-        <li><a href="{{ url_for('db_testas') }}">MySQL Test</a></li>
-        <li><a href="{{ url_for('komentarai') }}">Komentarai</a></li>
-
-        {% if session.vartotojo_id %}
-
-        <li><a href="{{ url_for('profilis') }}">Profilis <span style="font-size:9px;color:red;">({{ session.vartotojo_vardas }})</span></a></li>
-        <li><a href="{{ url_for('atsijungti') }}">Atsijungti</a></li>
-
-        {% else %}
-
-        <li><a href="{{ url_for('registracija') }}">Registracija</a></li>
-        <li><a href="{{ url_for('prisijungimas') }}">Prisijungti</a></li>
-
-        {% endif %}
-
-    </ul>
-</nav>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Pagrindinis</a></li>
+                <li><a href="{{ url_for('kontaktai') }}">Kontaktai</a></li>
+                <li><a href="{{ url_for('apie') }}">Apie mus</a></li>
+                <li><a href="{{ url_for('komentarai') }}">Komentarai</a></li>
+        
+                <!-- NAUJAS MENIU -->
+                <li class="dropdown">
+                    <a href="#">Paslaugos</a>
+                    <ul class="submenu">
+                        <li><a href="{{ url_for('paslaugos') }}">Visos paslaugos</a></li>
+                        <li><a href="{{ url_for('ivesti_paslauga') }}">Įvesti paslaugą</a></li>
+                    </ul>
+                </li>
+        
+                <li><a href="{{ url_for('db_testas') }}">MySQL testas</a></li>
+        
+                {% if session.vartotojo_id %}
+                    <li class="profilio-meniu">
+                        <a href="{{ url_for('profilis') }}">
+                            {% if session.avataro_nuoroda %}
+                                <img src="{{ session.avataro_nuoroda }}" class="mini-avataras">
+                            {% endif %}
+                            Profilis ({{ session.vartotojo_vardas }})
+                        </a>
+                    </li>
+                    <li><a href="{{ url_for('atsijungti') }}">Atsijungti</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('registracija') }}">Registracija</a></li>
+                    <li><a href="{{ url_for('prisijungimas') }}">Prisijungti</a></li>
+                {% endif %}
+            </ul>
+        </nav>
 
     </header>
 
